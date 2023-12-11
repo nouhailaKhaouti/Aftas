@@ -4,6 +4,7 @@ package com.example.aftas.controller;
 import com.example.aftas.entities.Member;
 import com.example.aftas.service.facade.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,14 +18,11 @@ public class MemberController {
 
     final private MemberService memberService;
 
-/*
     final ModelMapper modelMapper;
-*/
 
     @GetMapping("/")
     public ResponseEntity<?> getAllMembers() {
             List<Member> members = memberService.findAll();
-
             return new ResponseEntity<>(members, HttpStatus.OK);
     }
 

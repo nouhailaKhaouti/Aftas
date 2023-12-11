@@ -1,9 +1,13 @@
 package com.example.aftas.controller;
 
 
+import com.example.aftas.controller.vm.level.Request.addLevel;
+import com.example.aftas.controller.vm.level.Response.ResponseLevel;
 import com.example.aftas.entities.Level;
 import com.example.aftas.service.facade.LevelService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,9 +21,9 @@ public class LevelController {
 
     final private LevelService levelService;
 
-/*
+
     final ModelMapper modelMapper;
-*/
+
 
     @GetMapping("/")
     public ResponseEntity<?> getAllLevels() {
@@ -29,9 +33,11 @@ public class LevelController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<?> addLevel(@RequestBody() Level level) {
+    public ResponseEntity<?> addLevel(@Valid @RequestBody() addLevel addlevel) {
+            Level level=modelMapper.map(addlevel,Level.class);
             Level addedLevel = levelService.create(level);
-            return new ResponseEntity<>(addedLevel, HttpStatus.OK);
+            ResponseLevel responselevel=modelMapper.map(addedLevel,ResponseLevel.class);
+            return new ResponseEntity<>(responselevel, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")

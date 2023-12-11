@@ -2,16 +2,14 @@ package com.example.aftas.entities;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Time;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @Entity
@@ -26,10 +24,11 @@ public class Competition {
 
   private LocalDate date;
 
-  private Time startTime;
+  private LocalTime startTime;
 
-  private Time endTime;
+  private LocalTime endTime;
 
+  @Column(columnDefinition="Integer default 0")
   private Integer numberOfParticipants;
 
   private String location;

@@ -2,6 +2,8 @@ package com.example.aftas.service.impl;
 
 import com.example.aftas.Repository.MemberRepository;
 import com.example.aftas.entities.Member;
+import com.example.aftas.exception.AlreadyExistException;
+import com.example.aftas.exception.NotFoundException;
 import com.example.aftas.service.facade.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,12 +19,20 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Member create(Member member) {
-        return memberRepository.save(member);
+        if(memberRepository.findMemberByNum(member.getNum())==null)
+        {
+            return memberRepository.save(member);
+        }
+        throw new AlreadyExistException();
     }
 
     @Override
     public Member update(Member member) {
-        return memberRepository.save(member);
+        if(memberRepository.findMemberByNum(member.getNum())!=null)
+        {
+            return memberRepository.save(member);
+        }
+        throw new NotFoundException();
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.example.aftas.service.facade;
 import com.example.aftas.entities.Competition;
 
 import java.util.List;
+import java.util.zip.DataFormatException;
 
 public interface CompetitionService {
 
