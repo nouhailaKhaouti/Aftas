@@ -26,7 +26,7 @@ public class RankingServiceImpl implements RankingService {
 
     @Override
     public void delete(Ranking ranking) {
-        rankingRepository.delete(ranking)
+        rankingRepository.delete(ranking);
     }
     @Override
     public Optional<Ranking> findById(Ranking ranking) {

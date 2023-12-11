@@ -4,6 +4,7 @@ package com.example.aftas.controller;
 import com.example.aftas.entities.Ranking;
 import com.example.aftas.service.facade.RankingService;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,9 +18,8 @@ public class RankingController {
 
     final private RankingService rankingService;
 
-/*
     final ModelMapper modelMapper;
-*/
+
 
     @GetMapping("/")
     public ResponseEntity<?> getAllRankings() {
