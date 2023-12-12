@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +25,10 @@ public class CompetitionServiceImpl implements CompetitionService {
         if((competition.getStartTime()!=competition.getEndTime())&&(competition.getEndTime().isAfter(competition.getStartTime()))) {
             if (competition.getDate().isAfter(LocalDate.now().plusDays(2))) {
                 if (competitionRepository.findCompetitionByDate(competition.getDate()) == null) {
+                    String locationAbbreviation = competition.getLocation().substring(0, Math.min(competition.getLocation().length(), 3)).toUpperCase();
+                    String formattedDate = competition.getDate().format(DateTimeFormatter.ofPattern("dd-MM-yy"));
+                    String generatedName = locationAbbreviation + "-" + formattedDate;
+                    competition.setCode(generatedName);
                     return competitionRepository.save(competition);
                 }
                 throw new AlreadyExistException();
@@ -37,6 +42,7 @@ public class CompetitionServiceImpl implements CompetitionService {
     public Competition update(Competition competition) {
         Optional<Competition> competition1=competitionRepository.findById(competition.getId());
         if(competition1.isPresent()) {
+
             if (competition.getDate().isAfter(LocalDate.now().plusDays(2))) {
                 if(competition1.get().getDate()==competition.getDate()){
                     return competitionRepository.save(competition);

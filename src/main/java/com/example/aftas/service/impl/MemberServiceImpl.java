@@ -49,4 +49,12 @@ public class MemberServiceImpl implements MemberService {
     public List<Member> findAll() {
         return memberRepository.findAll();
     }
+
+    @Override
+    public List<Member> searchMember(String keySearch) {
+        if(keySearch.matches("\\d+"))
+            return this.memberRepository.findByNumOrNameOrFamilyName(Integer.valueOf(keySearch), "", "");
+        else
+            return this.memberRepository.findByNumOrNameOrFamilyName(null, keySearch, keySearch);
+    }
 }

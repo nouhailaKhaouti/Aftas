@@ -8,6 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.sql.Time;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Data
 public class addCompetition {
@@ -18,12 +19,12 @@ public class addCompetition {
     private LocalDate date;
 
     @NotNull(message = "the date can't be null")
-    @DateTimeFormat(pattern = "hh-mm")
-    private Time startTime;
+    @DateTimeFormat(pattern = "hh:mm")
+    private LocalTime startTime;
 
     @NotNull(message = "the date can't be null")
-    @DateTimeFormat(pattern = "hh-mm")
-    private Time endTime;
+    @DateTimeFormat(pattern = "hh:mm")
+    private LocalTime endTime;
 
     @Positive(message = "the number of participants can't be negative")
     @NotNull(message = "the number of Participants can't be null")

@@ -1,9 +1,13 @@
 package com.example.aftas.controller;
 
 
+import com.example.aftas.controller.vm.hunting.request.requestHuntingWithWeight;
+import com.example.aftas.controller.vm.hunting.response.responseHunting;
 import com.example.aftas.entities.Hunting;
 import com.example.aftas.service.facade.HuntingService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,9 +21,8 @@ public class HuntingController {
 
     final private HuntingService huntingService;
 
-/*
+
     final ModelMapper modelMapper;
-*/
 
     @GetMapping("/")
     public ResponseEntity<?> getAllHuntings() {
@@ -29,17 +32,13 @@ public class HuntingController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<?> addHunting(@RequestBody() Hunting hunting) {
-            Hunting addedHunting = huntingService.create(hunting);
-            return new ResponseEntity<>(addedHunting, HttpStatus.OK);
+    public ResponseEntity<?> addHunting(@Valid  @RequestBody()requestHuntingWithWeight hunting) {
+            Hunting hunting1=modelMapper.map(hunting.getHunting(),Hunting.class);
+            Hunting addedHunting = huntingService.create(hunting1, hunting.getWeight());
+            responseHunting responseHunting=modelMapper.map(addedHunting,responseHunting.class);
+            return new ResponseEntity<>(responseHunting, HttpStatus.OK);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<?> updateHunting(@PathVariable("id") long id, @RequestBody() Hunting hunting) {
-            hunting.setId(id);
-            Hunting addedHunting = huntingService.update(hunting);
-            return new ResponseEntity<>(addedHunting, HttpStatus.OK);
-    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteHunting(@PathVariable("id") long id) {

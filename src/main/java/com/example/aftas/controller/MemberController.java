@@ -1,8 +1,11 @@
 package com.example.aftas.controller;
 
 
+import com.example.aftas.controller.vm.member.request.requestMember;
+import com.example.aftas.controller.vm.member.response.responseMember;
 import com.example.aftas.entities.Member;
 import com.example.aftas.service.facade.MemberService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -10,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,9 +31,11 @@ public class MemberController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<?> addMember(@RequestBody() Member member) {
+    public ResponseEntity<?> addMember(@Valid  @RequestBody() requestMember requestmember) {
+            Member member=modelMapper.map(requestmember,Member.class);
             Member addedMember = memberService.create(member);
-            return new ResponseEntity<>(addedMember, HttpStatus.OK);
+            responseMember responseMember=modelMapper.map(addedMember,responseMember.class);
+            return new ResponseEntity<>(responseMember, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
@@ -37,6 +43,13 @@ public class MemberController {
             member.setId(id);
             Member addedMember = memberService.update(member);
             return new ResponseEntity<>(addedMember, HttpStatus.OK);
+    }
+
+    @GetMapping("/{search}")
+    public ResponseEntity<?> search(@PathVariable("search") String search){
+        List<Member> members=memberService.searchMember(search);
+        List<responseMember> responseMembers=members.stream().map(m->modelMapper.map(m,responseMember.class)).toList();
+        return new ResponseEntity<>(responseMembers, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

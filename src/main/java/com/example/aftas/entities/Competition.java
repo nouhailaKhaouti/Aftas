@@ -27,6 +27,9 @@ public class Competition {
 
   private LocalTime startTime;
 
+  @Column(unique = true)
+  private String code;
+
   private LocalTime endTime;
 
   @Column(columnDefinition="Integer default 0")

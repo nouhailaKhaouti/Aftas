@@ -7,4 +7,6 @@ import lombok.Data;
 @Data
 public class RankingResponse {
     private Member member;
+    private Integer score;
+    private Integer rank;
 }

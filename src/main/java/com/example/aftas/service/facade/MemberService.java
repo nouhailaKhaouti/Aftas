@@ -17,4 +17,6 @@ public interface MemberService {
 
     List<Member> findAll();
 
-}
+    List<Member> searchMember(String keySearch);
+
+    }

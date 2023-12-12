@@ -20,5 +20,7 @@ public interface RankingService {
     List<Ranking> findAll();
     Ranking findByMemberAndCompetition(Member member, Competition competition);
 
+     List<Ranking> sortMemberWithPoints();
+
 
     }

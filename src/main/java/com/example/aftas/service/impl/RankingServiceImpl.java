@@ -60,6 +60,19 @@ public class RankingServiceImpl implements RankingService {
         return rankingRepository.save(ranking1);
     }
 
+
+    @Override
+    public List<Ranking> sortMemberWithPoints(){
+        List<Ranking> rankings=rankingRepository.findByOrderByScoreAsc();
+        for (int i = 1; i < rankings.size()-1; i++) {
+            if((i!=1)&&(rankings.get(i).getScore().equals(rankings.get(i-1).getScore()))){
+                rankings.get(i).setRank(rankings.get(i-1).getRank());
+            }else{
+                rankings.get(i).setRank(i);
+            }
+        }
+        return rankings;
+    }
     @Override
     public void delete(Ranking ranking) {
         rankingRepository.delete(ranking);
