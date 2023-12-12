@@ -9,7 +9,7 @@ public class addLevel {
 
     @NotNull(message = "the description can't be null")
     @NotBlank(message = "the description can't be blank")
-    @Size(max = 10, message = "the description you entered exceeded the length allowed")
+    @Size(max = 100, message = "the description you entered exceeded the length allowed")
     private String description;
 
     @NotNull(message = "the code can't be null")

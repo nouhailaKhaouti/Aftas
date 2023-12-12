@@ -10,4 +10,5 @@ import java.util.List;
 @Repository
 public interface FishRepository extends JpaRepository<Fish,Long> {
 
+    Fish findFishByName(String fish);
 }

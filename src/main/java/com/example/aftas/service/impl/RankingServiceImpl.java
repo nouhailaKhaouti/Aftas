@@ -1,12 +1,22 @@
 package com.example.aftas.service.impl;
 
 import com.example.aftas.Repository.RankingRepository;
+import com.example.aftas.entities.Competition;
+import com.example.aftas.entities.Member;
 import com.example.aftas.entities.Ranking;
+import com.example.aftas.exception.CustomException;
+import com.example.aftas.exception.DateValidationException;
+import com.example.aftas.exception.NotFoundException;
+import com.example.aftas.service.facade.CompetitionService;
+import com.example.aftas.service.facade.MemberService;
 import com.example.aftas.service.facade.RankingService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -14,14 +24,40 @@ import java.util.Optional;
 public class RankingServiceImpl implements RankingService {
 
     final private RankingRepository rankingRepository;
+    final private CompetitionService competitionService;
+    final private MemberService memberService;
     @Override
     public Ranking create(Ranking ranking) {
+        throwExceptionWhenMemberDoNotExist(ranking.getMember());
+        Competition competition=competitionService.findById(ranking.getCompetition());
+        throwExceptionWhenCompetitionDoNotExist(competition);
+
+        if(rankingRepository.findRankingByCompetitionAndMember(competition,ranking.getMember())!=null){
+            throw new CustomException("this member is already registered to this competition ", HttpStatus.FOUND);
+        }
+
+        if(rankingRepository.countRankingsByCompetition(competition).equals(competition.getNumberOfParticipants())){
+            throw new CustomException("you can't register this member in this competition , there's no more available places ", HttpStatus.CONFLICT);
+        }
+
+        if(LocalDate.now().isAfter(competition.getDate())){
+            throw new DateValidationException();
+        }
+
         return rankingRepository.save(ranking);
     }
 
     @Override
     public Ranking update(Ranking ranking) {
-        return rankingRepository.save(ranking);
+        Optional<Ranking> rankingO=rankingRepository.findById(ranking.getId());
+        Ranking ranking1=rankingO.get();
+        throwExceptionWhenRankingDoNotExist(ranking1);
+        throwExceptionWhenMemberDoNotExist(ranking1.getMember());
+        Competition competition=competitionService.findById(ranking1.getCompetition());
+        ranking1.setRank(ranking.getRank());
+        ranking1.setScore(ranking.getScore());
+        throwExceptionWhenCompetitionDoNotExist(competition);
+        return rankingRepository.save(ranking1);
     }
 
     @Override
@@ -37,4 +73,26 @@ public class RankingServiceImpl implements RankingService {
     public List<Ranking> findAll() {
         return rankingRepository.findAll();
     }
+
+    public Ranking findByMemberAndCompetition(Member member,Competition competition){
+        return rankingRepository.findRankingByCompetitionAndMember(competition,member);
+    }
+    public void throwExceptionWhenMemberDoNotExist(Member member){
+        if(memberService.findById(member).isEmpty()){
+            throw new NotFoundException();
+        }
+    }
+
+    public void throwExceptionWhenCompetitionDoNotExist(Competition competition){
+        if(competition==null){
+            throw new NotFoundException();
+        }
+    }
+
+    public void throwExceptionWhenRankingDoNotExist(Ranking ranking){
+        if(ranking==null){
+            throw new NotFoundException();
+        }
+    }
+
 }

@@ -16,4 +16,7 @@ public interface FishService {
 
     List<Fish> findAll();
 
-}
+     Fish findByName(Fish fish);
+
+
+    }

@@ -35,6 +35,9 @@ public class FishServiceImpl implements FishService {
         return fish1.orElse(null);
     }
 
+    public Fish findByName(Fish fish){
+        return fishRepository.findFishByName(fish.getName());
+    }
     @Override
     public List<Fish> findAll() {
         return fishRepository.findAll();

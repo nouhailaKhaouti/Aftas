@@ -20,12 +20,18 @@ public class Member {
   private Long id;
 
   private Integer num;
+
   private String name;
+
   private String familyName;
+
   private LocalDate accessionDate;
+
   private String nationality;
+
   @Enumerated(EnumType.STRING)
   private IdentityDocumentType identityDocument;
+
   private String identityNumber;
 
   public enum IdentityDocumentType {

@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface HuntingService {
 
-    Hunting create(Hunting member);
+    Hunting create(Hunting member,Double weight);
 
     Hunting update(Hunting member);
 

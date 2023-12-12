@@ -22,6 +22,7 @@ public class Competition {
   @GeneratedValue
   private Long id;
 
+  @Column(unique = true)
   private LocalDate date;
 
   private LocalTime startTime;
