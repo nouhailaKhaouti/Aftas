@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class rankingRequest {
 
-    private requestIdMember idMember;
+    private requestIdMember member;
 
-    private requestIdCompetition idCompetition;
+    private requestIdCompetition competition;
 }

@@ -1,6 +1,7 @@
 package com.example.aftas.entities;
 
 
+import com.example.aftas.embedded.RankingPrimaryKey;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,10 +14,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class Ranking {
-  @Id
-  @GeneratedValue
 
-  private Long id;
+  @EmbeddedId
+  private RankingPrimaryKey id;
 
   @Column(columnDefinition = "integer default 0")
   private Integer rank;
@@ -25,8 +25,12 @@ public class Ranking {
   private Integer score;
 
   @ManyToOne
+  @JoinColumn(name = "competition_id")
+  @MapsId("competitionId")
   private Competition competition;
 
   @ManyToOne
+  @JoinColumn(name = "member_id")
+  @MapsId("memberId")
   private Member member;
 }

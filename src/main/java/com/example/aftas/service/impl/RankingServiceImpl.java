@@ -1,6 +1,7 @@
 package com.example.aftas.service.impl;
 
 import com.example.aftas.Repository.RankingRepository;
+import com.example.aftas.embedded.RankingPrimaryKey;
 import com.example.aftas.entities.Competition;
 import com.example.aftas.entities.Member;
 import com.example.aftas.entities.Ranking;
@@ -16,8 +17,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -44,13 +43,13 @@ public class RankingServiceImpl implements RankingService {
             throw new DateValidationException();
         }
 
+        ranking.setId(new RankingPrimaryKey(competition.getId(), ranking.getMember().getId()));
         return rankingRepository.save(ranking);
     }
 
     @Override
     public Ranking update(Ranking ranking) {
-        Optional<Ranking> rankingO=rankingRepository.findById(ranking.getId());
-        Ranking ranking1=rankingO.get();
+        Ranking ranking1=rankingRepository.findRankingByCompetitionAndMember(ranking.getCompetition(),ranking.getMember());
         throwExceptionWhenRankingDoNotExist(ranking1);
         throwExceptionWhenMemberDoNotExist(ranking1.getMember());
         Competition competition=competitionService.findById(ranking1.getCompetition());
@@ -78,8 +77,8 @@ public class RankingServiceImpl implements RankingService {
         rankingRepository.delete(ranking);
     }
     @Override
-    public Optional<Ranking> findById(Ranking ranking) {
-        return rankingRepository.findById(ranking.getId());
+    public Ranking findById(Ranking ranking) {
+        return rankingRepository.findRankingByCompetitionAndMember(ranking.getCompetition(),ranking.getMember());
     }
 
     @Override

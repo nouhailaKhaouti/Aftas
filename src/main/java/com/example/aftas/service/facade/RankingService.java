@@ -5,7 +5,6 @@ import com.example.aftas.entities.Member;
 import com.example.aftas.entities.Ranking;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface RankingService {
 
@@ -15,7 +14,7 @@ public interface RankingService {
 
     void delete(Ranking member);
 
-    Optional<Ranking> findById(Ranking member);
+    Ranking findById(Ranking member);
 
     List<Ranking> findAll();
     Ranking findByMemberAndCompetition(Member member, Competition competition);

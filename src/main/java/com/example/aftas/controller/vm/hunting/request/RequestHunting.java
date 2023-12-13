@@ -8,8 +8,8 @@ import lombok.Data;
 @Data
 public class RequestHunting {
 
-    private requestIdCompetition idCompetition;
-    private requestIdMember idMember;
-    private requestIdFish idFish;
+    private requestIdCompetition competition;
+    private requestIdMember member;
+    private requestIdFish fish;
 
 }

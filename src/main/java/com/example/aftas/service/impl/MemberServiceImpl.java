@@ -8,6 +8,7 @@ import com.example.aftas.service.facade.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,6 +22,7 @@ public class MemberServiceImpl implements MemberService {
     public Member create(Member member) {
         if(memberRepository.findMemberByNum(member.getNum())==null)
         {
+            member.setAccessionDate(LocalDate.now());
             return memberRepository.save(member);
         }
         throw new AlreadyExistException();
