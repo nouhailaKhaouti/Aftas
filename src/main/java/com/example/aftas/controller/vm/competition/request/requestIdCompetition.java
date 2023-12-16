@@ -7,5 +7,5 @@ import lombok.Data;
 public class requestIdCompetition {
 
     @NotNull(message = "the id can't be null")
-    private Long id;
+    private String code;
 }

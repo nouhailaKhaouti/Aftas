@@ -28,30 +28,33 @@ public class RankingController {
 
     @GetMapping("/")
     public ResponseEntity<?> getAllRankings() {
-            List<Ranking> rankings = rankingService.sortMemberWithPoints();
+            List<Ranking> rankings = rankingService.findAll();
             List<RankingResponse> rankingResponse=rankings.stream().map(r->modelMapper.map(r,RankingResponse.class)).toList();
             return new ResponseEntity<>(rankingResponse, HttpStatus.OK);
     }
 
+    @GetMapping("/{competition}")
+    public ResponseEntity<?> getRankingsByCompetition(@PathVariable String competition) {
+        List<Ranking> rankings = rankingService.sortMemberWithPoints(competition);
+        List<RankingResponse> rankingResponse=rankings.stream().map(r->modelMapper.map(r,RankingResponse.class)).toList();
+        return new ResponseEntity<>(rankingResponse, HttpStatus.OK);
+    }
+
     @PostMapping("/")
-    public ResponseEntity<?> addRanking(@Valid @RequestBody() rankingRequest rankingRequest) {
-            Ranking ranking=modelMapper.map(rankingRequest,Ranking.class);
-            Ranking addedRanking = rankingService.create(ranking);
-            RankingResponse rankingResponse=modelMapper.map(addedRanking,RankingResponse.class);
-            return new ResponseEntity<>(rankingResponse, HttpStatus.OK);
+    public ResponseEntity<?> addRanking(@Valid @RequestBody() rankingRequest rankingrequest) {
+            Ranking addedRanking = rankingService.create(rankingrequest.ToRankingEntity());
+            return new ResponseEntity<>(modelMapper.map(addedRanking,RankingResponse.class), HttpStatus.OK);
     }
 
 
     @DeleteMapping("/{competition}/{member}")
-    public ResponseEntity<?> deleteRanking(@PathVariable("competition") long competition,@PathVariable("member") long member) {
+    public ResponseEntity<?> deleteRanking(@PathVariable("competition") String competition,@PathVariable("member") Integer member) {
 
-            Ranking ranking=new Ranking();
-            Member member1=ranking.getMember();
-            member1.setId(member);
-            Competition competition1=ranking.getCompetition();
-            competition1.setId(competition);
-            ranking.setCompetition(competition1);
-            ranking.setMember(member1);
+            Ranking ranking=Ranking.builder().competition(
+                    Competition.builder().code(competition).build()
+            ).member(
+                    Member.builder().num(member).build()
+            ).build();
             rankingService.delete(ranking);
             return new ResponseEntity<>(HttpStatus.OK);
     }

@@ -19,10 +19,10 @@ public class Ranking {
   private RankingPrimaryKey id;
 
   @Column(columnDefinition = "integer default 0")
-  private Integer rank;
+  private Integer rank=0;
 
   @Column(columnDefinition = "integer default 0")
-  private Integer score;
+  private Integer score=0;
 
   @ManyToOne
   @JoinColumn(name = "competition_id")

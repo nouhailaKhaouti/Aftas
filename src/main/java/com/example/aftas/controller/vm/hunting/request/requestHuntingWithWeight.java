@@ -1,6 +1,5 @@
 package com.example.aftas.controller.vm.hunting.request;
 
-import com.example.aftas.controller.vm.hunting.request.RequestHunting;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;

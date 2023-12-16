@@ -38,6 +38,10 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public Member findByNum(Integer num){
+        return memberRepository.findMemberByNum(num);
+    }
+    @Override
     public void delete(Member member) {
          memberRepository.delete(member);
     }

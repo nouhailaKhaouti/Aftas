@@ -3,13 +3,13 @@ import com.example.aftas.controller.vm.Ranking.response.RankingResponse;
 
 import lombok.Data;
 
-import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
 @Data
 public class ResponseCompetition {
+    private String code;
 
     private LocalDate date;
 
@@ -23,6 +23,6 @@ public class ResponseCompetition {
 
     private Double amount;
 
-    private List<RankingResponse> rankingList;
+    private List<RankingResponse> rankings;
 
 }

@@ -17,4 +17,5 @@ public interface CompetitionService {
 
     List<Competition> findAll();
 
+    Competition findCompetitionByCode(Competition competition);
 }

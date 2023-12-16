@@ -65,7 +65,17 @@ public class CompetitionServiceImpl implements CompetitionService {
     @Override
     public Competition findById(Competition competition) {
         Optional<Competition> competition1=competitionRepository.findById(competition.getId());
-        return competition1.orElse(null);    }
+        if(competition1.isEmpty()){
+            throw new NotFoundException();
+        }
+        return competition1.get();
+    }
+
+
+    @Override
+    public Competition findCompetitionByCode(Competition competition){
+        return competitionRepository.findCompetitionByCode(competition.getCode());
+    }
 
     @Override
     public List<Competition> findAll() {

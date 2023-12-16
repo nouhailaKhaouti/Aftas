@@ -7,5 +7,5 @@ import lombok.Data;
 public class requestIdMember {
 
       @NotNull(message = "the id can't be null")
-      private Long id;
+      private Integer num;
 }

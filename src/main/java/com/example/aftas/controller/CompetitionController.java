@@ -27,7 +27,14 @@ public class CompetitionController {
     @GetMapping("/")
     public ResponseEntity<?> getAllCompetitions() {
             List<Competition> competitions = competitionService.findAll();
-            return new ResponseEntity<>(competitions, HttpStatus.OK);
+            List<ResponseCompetition> responseCompetitions=competitions.stream().map(c->modelMapper.map(c,ResponseCompetition.class)).toList();
+            return new ResponseEntity<>(responseCompetitions, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> findCompetitionById(@PathVariable("id") Long id) {
+        Competition competitions = competitionService.findById(Competition.builder().id(id).build());
+        return new ResponseEntity<>(modelMapper.map(competitions,ResponseCompetition.class), HttpStatus.OK);
     }
 
     @PostMapping("/")

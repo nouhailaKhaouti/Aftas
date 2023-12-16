@@ -4,14 +4,17 @@ import lombok.Data;
 
 import java.sql.Time;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Data
 public class responseCompetitionWithOutRanking {
+    private String code;
+
     private LocalDate date;
 
-    private Time startTime;
+    private LocalTime startTime;
 
-    private Time endTime;
+    private LocalTime endTime;
 
     private Integer numberOfParticipants;
 

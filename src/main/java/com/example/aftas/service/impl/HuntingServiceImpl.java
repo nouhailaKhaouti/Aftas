@@ -25,9 +25,9 @@ public class HuntingServiceImpl implements HuntingService {
     final private RankingService rankingService;
     @Override
     public Hunting create(Hunting hunting,Double weight) {
-        Member member=memberService.findById(hunting.getMember()).get();
-        throwExceptionWhenMemberDoNotExist(hunting.getMember());
-        Competition competition=competitionService.findById(hunting.getCompetition());
+        Member member=memberService.findByNum(hunting.getMember().getNum());
+        throwExceptionWhenMemberDoNotExist(member);
+        Competition competition=competitionService.findCompetitionByCode(hunting.getCompetition());
         throwExceptionWhenCompetitionDoNotExist(competition);
         Ranking ranking=rankingService.findByMemberAndCompetition(member,competition);
         if(ranking==null){
@@ -49,13 +49,13 @@ public class HuntingServiceImpl implements HuntingService {
 
         ranking.setScore(ranking.getRank()+fish.getLevel().getPoints());
         rankingService.update(ranking);
+        hunting.setMember(member);
+        hunting.setCompetition(competition);
         Hunting hunting1=huntingRepository.findHuntingByFishAndMemberAndCompetition(fish,hunting.getMember(),hunting.getCompetition());
         if(hunting1!=null){
             return update(hunting1);
         }
-
         return huntingRepository.save(hunting);
-
     }
 
     @Override
@@ -83,7 +83,7 @@ public class HuntingServiceImpl implements HuntingService {
         return huntingRepository.findAll();
     }
     public void throwExceptionWhenMemberDoNotExist(Member member){
-        if(memberService.findById(member).isEmpty()){
+        if(member==null){
             throw new NotFoundException();
         }
     }

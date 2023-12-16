@@ -27,11 +27,12 @@ public class RankingServiceImpl implements RankingService {
     final private MemberService memberService;
     @Override
     public Ranking create(Ranking ranking) {
-        throwExceptionWhenMemberDoNotExist(ranking.getMember());
-        Competition competition=competitionService.findById(ranking.getCompetition());
+        Member member=memberService.findByNum(ranking.getMember().getNum());
+        throwExceptionWhenMemberDoNotExist(member);
+        Competition competition=competitionService.findCompetitionByCode(ranking.getCompetition());
         throwExceptionWhenCompetitionDoNotExist(competition);
 
-        if(rankingRepository.findRankingByCompetitionAndMember(competition,ranking.getMember())!=null){
+        if(rankingRepository.findRankingByCompetitionAndMember(competition,member)!=null){
             throw new CustomException("this member is already registered to this competition ", HttpStatus.FOUND);
         }
 
@@ -43,7 +44,11 @@ public class RankingServiceImpl implements RankingService {
             throw new DateValidationException();
         }
 
-        ranking.setId(new RankingPrimaryKey(competition.getId(), ranking.getMember().getId()));
+        ranking.setId(new RankingPrimaryKey(competition.getId(), member.getId()));
+        ranking.setCompetition(competition);
+        ranking.setMember(member);
+        ranking.setScore(0);
+        ranking.setRank(0);
         return rankingRepository.save(ranking);
     }
 
@@ -61,8 +66,10 @@ public class RankingServiceImpl implements RankingService {
 
 
     @Override
-    public List<Ranking> sortMemberWithPoints(){
-        List<Ranking> rankings=rankingRepository.findByOrderByScoreAsc();
+    public List<Ranking> sortMemberWithPoints(String code){
+        Competition competition=competitionService.findCompetitionByCode(Competition.builder().code(code).build());
+        throwExceptionWhenCompetitionDoNotExist(competition);
+        List<Ranking> rankings=rankingRepository.findByCompetitionOrderByScoreAsc(competition);
         for (int i = 1; i < rankings.size()-1; i++) {
             if((i!=1)&&(rankings.get(i).getScore().equals(rankings.get(i-1).getScore()))){
                 rankings.get(i).setRank(rankings.get(i-1).getRank());
@@ -90,7 +97,7 @@ public class RankingServiceImpl implements RankingService {
         return rankingRepository.findRankingByCompetitionAndMember(competition,member);
     }
     public void throwExceptionWhenMemberDoNotExist(Member member){
-        if(memberService.findById(member).isEmpty()){
+        if(member==null){
             throw new NotFoundException();
         }
     }
