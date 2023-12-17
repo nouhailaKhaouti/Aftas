@@ -2,12 +2,13 @@ package com.example.aftas.service.impl;
 
 import com.example.aftas.Repository.CompetitionRepository;
 import com.example.aftas.entities.Competition;
-import com.example.aftas.entities.Competition;
 import com.example.aftas.exception.AlreadyExistException;
 import com.example.aftas.exception.DateValidationException;
 import com.example.aftas.exception.NotFoundException;
 import com.example.aftas.service.facade.CompetitionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -75,6 +76,14 @@ public class CompetitionServiceImpl implements CompetitionService {
     @Override
     public Competition findCompetitionByCode(Competition competition){
         return competitionRepository.findCompetitionByCode(competition.getCode());
+    }
+
+    @Override
+    public Page<Competition> findCompetitionByCode(Competition competition, Pageable paging){
+        if(competition.getCode()!=null) {
+            return competitionRepository.findCompetitionByCode(competition.getCode(),paging);
+        }
+        return competitionRepository.findAll(paging);
     }
 
     @Override

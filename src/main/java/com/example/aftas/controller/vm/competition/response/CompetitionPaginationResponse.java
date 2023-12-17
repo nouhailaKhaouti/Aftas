@@ -1,6 +1,6 @@
-package com.example.aftas.controller.vm.member.response;
+package com.example.aftas.controller.vm.competition.response;
 
-import com.example.aftas.controller.vm.member.request.requestMember;
+import com.example.aftas.controller.vm.member.response.responseMember;
 import lombok.Builder;
 import lombok.Data;
 
@@ -8,10 +8,10 @@ import java.util.List;
 
 @Data
 @Builder
-public class MemberPaginationResponse {
+public class CompetitionPaginationResponse {
 
-    private List<responseMember> members;
-    private Long totalMembers;
+    private List<responseCompetitionWithOutRanking> competitions;
+    private Long totalCompetitions;
     private int currentPage;
     private int totalPages;
 }
