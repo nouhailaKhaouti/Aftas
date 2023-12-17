@@ -15,7 +15,7 @@ public interface MemberService {
 
     Optional<Member> findById(Member member);
 
-    List<Member> findAll();
+    List<Member> findAll(int page, int pageSize);
 
     List<Member> searchMember(String keySearch);
     Member findByNum(Integer num);

@@ -32,13 +32,13 @@ public class HuntingController {
             return new ResponseEntity<>(huntings, HttpStatus.OK);
     }
 
-    @GetMapping("/member/competition")
+    @PostMapping("/member/competition")
     public ResponseEntity<?> getHuntingsByMemberAndCompetition(@Valid @RequestBody RequestHuntingWithOutFish request) {
         return new ResponseEntity<>(huntingService.findByMemberAndCompetition(request.ToHunting()).stream().map(h->modelMapper.map(h,responseHunting.class)).toList(), HttpStatus.OK);
     }
 
     @PostMapping("/")
-    public ResponseEntity<?> addHunting(@Valid  @RequestBody()requestHuntingWithWeight hunting) {
+    public ResponseEntity<?> addHunting(@Valid  @RequestBody() requestHuntingWithWeight hunting) {
             Hunting addedHunting = huntingService.create(hunting.getHunting().ToHunting(), hunting.getWeight());
             return new ResponseEntity<>(modelMapper.map(addedHunting,responseHunting.class), HttpStatus.OK);
     }

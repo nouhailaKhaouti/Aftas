@@ -6,6 +6,9 @@ import com.example.aftas.exception.AlreadyExistException;
 import com.example.aftas.exception.NotFoundException;
 import com.example.aftas.service.facade.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -52,10 +55,11 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public List<Member> findAll() {
-        return memberRepository.findAll();
+    public List<Member> findAll(int page, int pageSize) {
+        Pageable pageable = PageRequest.of(page, pageSize);
+        Page<Member> memberPage = memberRepository.findAll(pageable);
+        return memberPage.getContent();
     }
-
     @Override
     public List<Member> searchMember(String keySearch) {
         if(keySearch.matches("\\d+"))

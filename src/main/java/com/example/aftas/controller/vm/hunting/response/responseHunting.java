@@ -9,8 +9,6 @@ import lombok.Data;
 public class responseHunting {
     private responseFish fish;
     private responseCompetitionWithOutRanking competition;
-
     private responseMember member;
-
     private Integer numberOfFish;
 }

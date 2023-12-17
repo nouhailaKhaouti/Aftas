@@ -24,9 +24,9 @@ public class MemberController {
 
     final ModelMapper modelMapper;
 
-    @GetMapping("/")
-    public ResponseEntity<?> getAllMembers() {
-            List<Member> members = memberService.findAll();
+    @GetMapping("/{page}/{pageSize}/")
+    public ResponseEntity<?> getAllMembers(@PathVariable("page") int page,@PathVariable("pageSize") int pageSize) {
+            List<Member> members = memberService.findAll(page,pageSize);
             return new ResponseEntity<>(members, HttpStatus.OK);
     }
 
