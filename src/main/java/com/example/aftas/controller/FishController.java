@@ -1,9 +1,12 @@
 package com.example.aftas.controller;
 
 
+import com.example.aftas.controller.vm.Fish.requestFish;
+import com.example.aftas.controller.vm.Fish.responseFish;
 import com.example.aftas.entities.Fish;
 import com.example.aftas.service.facade.FishService;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,15 +20,13 @@ public class FishController {
 
     final private FishService fishService;
 
-/*
+
     final ModelMapper modelMapper;
-*/
 
     @GetMapping("/")
-    public ResponseEntity<?> getAllFishs() {
-            List<Fish> fishs = fishService.findAll();
-
-            return new ResponseEntity<>(fishs, HttpStatus.OK);
+    public ResponseEntity<?> getAllFishes() {
+            List<Fish> fishes = fishService.findAll();
+            return new ResponseEntity<>(fishes.stream().map(f->modelMapper.map(f, responseFish.class)).toList(), HttpStatus.OK);
     }
 
     @PostMapping("/")

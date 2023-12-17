@@ -28,8 +28,7 @@ public class LevelController {
     @GetMapping("/")
     public ResponseEntity<?> getAllLevels() {
             List<Level> levels = levelService.findAll();
-
-            return new ResponseEntity<>(levels, HttpStatus.OK);
+            return new ResponseEntity<>(levels.stream().map(l->modelMapper.map(l,ResponseLevel.class)).toList(), HttpStatus.OK);
     }
 
     @PostMapping("/")

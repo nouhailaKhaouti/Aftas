@@ -17,4 +17,6 @@ public interface HuntingService {
 
     List<Hunting> findAll();
 
-}
+     List<Hunting> findByMemberAndCompetition(Hunting hunting);
+
+    }

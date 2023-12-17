@@ -69,6 +69,15 @@ public class HuntingServiceImpl implements HuntingService {
     }
 
     @Override
+    public List<Hunting> findByMemberAndCompetition(Hunting hunting){
+        Member member=memberService.findByNum(hunting.getMember().getNum());
+        throwExceptionWhenMemberDoNotExist(member);
+        Competition competition=competitionService.findCompetitionByCode(hunting.getCompetition());
+        throwExceptionWhenCompetitionDoNotExist(competition);
+        return huntingRepository.findHuntingByMemberAndCompetition(member,competition);
+    }
+
+    @Override
     public void delete(Hunting hunting) {
         huntingRepository.delete(hunting);
     }

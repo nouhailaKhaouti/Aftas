@@ -1,6 +1,7 @@
 package com.example.aftas.controller;
 
 
+import com.example.aftas.controller.vm.hunting.request.RequestHuntingWithOutFish;
 import com.example.aftas.controller.vm.hunting.request.requestHuntingWithWeight;
 import com.example.aftas.controller.vm.hunting.response.responseHunting;
 import com.example.aftas.entities.Hunting;
@@ -31,12 +32,15 @@ public class HuntingController {
             return new ResponseEntity<>(huntings, HttpStatus.OK);
     }
 
+    @GetMapping("/member/competition")
+    public ResponseEntity<?> getHuntingsByMemberAndCompetition(@Valid @RequestBody RequestHuntingWithOutFish request) {
+        return new ResponseEntity<>(huntingService.findByMemberAndCompetition(request.ToHunting()).stream().map(h->modelMapper.map(h,responseHunting.class)).toList(), HttpStatus.OK);
+    }
+
     @PostMapping("/")
     public ResponseEntity<?> addHunting(@Valid  @RequestBody()requestHuntingWithWeight hunting) {
-            Hunting hunting1=modelMapper.map(hunting.getHunting(),Hunting.class);
-            Hunting addedHunting = huntingService.create(hunting1, hunting.getWeight());
-            responseHunting responseHunting=modelMapper.map(addedHunting,responseHunting.class);
-            return new ResponseEntity<>(responseHunting, HttpStatus.OK);
+            Hunting addedHunting = huntingService.create(hunting.getHunting().ToHunting(), hunting.getWeight());
+            return new ResponseEntity<>(modelMapper.map(addedHunting,responseHunting.class), HttpStatus.OK);
     }
 
 

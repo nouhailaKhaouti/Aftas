@@ -7,7 +7,11 @@ import com.example.aftas.entities.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface HuntingRepository extends JpaRepository<Hunting,Long> {
     Hunting findHuntingByFishAndMemberAndCompetition(Fish fish, Member member,Competition competition);
+    List<Hunting> findHuntingByMemberAndCompetition(Member member, Competition competition);
+
 }
