@@ -2,12 +2,16 @@ package com.example.aftas.controller;
 
 
 import com.example.aftas.controller.vm.member.request.requestMember;
+import com.example.aftas.controller.vm.member.response.MemberPaginationResponse;
 import com.example.aftas.controller.vm.member.response.responseMember;
 import com.example.aftas.entities.Member;
 import com.example.aftas.service.facade.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,12 +28,6 @@ public class MemberController {
 
     final ModelMapper modelMapper;
 
-    @GetMapping("/{page}/{pageSize}/")
-    public ResponseEntity<?> getAllMembers(@PathVariable("page") int page,@PathVariable("pageSize") int pageSize) {
-            List<Member> members = memberService.findAll(page,pageSize);
-            return new ResponseEntity<>(members, HttpStatus.OK);
-    }
-
     @PostMapping("/")
     public ResponseEntity<?> addMember(@Valid  @RequestBody() requestMember requestmember) {
             Member member=modelMapper.map(requestmember,Member.class);
@@ -45,11 +43,18 @@ public class MemberController {
             return new ResponseEntity<>(addedMember, HttpStatus.OK);
     }
 
-    @GetMapping("/{search}")
-    public ResponseEntity<?> search(@PathVariable("search") String search){
-        List<Member> members=memberService.searchMember(search);
-        List<responseMember> responseMembers=members.stream().map(m->modelMapper.map(m,responseMember.class)).toList();
-        return new ResponseEntity<>(responseMembers, HttpStatus.OK);
+    @PostMapping("/Members")
+    public ResponseEntity<?> search(@RequestParam(required = false) String search, @RequestParam(defaultValue = "0") Integer page,
+                                    @RequestParam(defaultValue = "3") Integer size){
+        Pageable paging = PageRequest.of(page, size);
+        Page<Member> pageTuts=memberService.searchMember(search,paging);;
+        return new ResponseEntity<>( MemberPaginationResponse.builder()
+                .members(pageTuts.getContent().stream()
+                        .map(p->modelMapper.map(p,responseMember.class))
+                        .toList())
+                .totalMembers(pageTuts.getTotalElements())
+                .totalPages(pageTuts.getTotalPages()).currentPage(pageTuts.getNumber())
+                .build(), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

@@ -61,10 +61,13 @@ public class MemberServiceImpl implements MemberService {
         return memberPage.getContent();
     }
     @Override
-    public List<Member> searchMember(String keySearch) {
-        if(keySearch.matches("\\d+"))
-            return this.memberRepository.findByNumOrNameOrFamilyName(Integer.valueOf(keySearch), "", "");
-        else
-            return this.memberRepository.findByNumOrNameOrFamilyName(null, keySearch, keySearch);
+    public Page<Member> searchMember(String keySearch, Pageable page) {
+        if(keySearch!=null) {
+            if (keySearch.matches("\\d+"))
+                return memberRepository.findByNumOrNameOrFamilyName(Integer.valueOf(keySearch), "", "",page);
+            else
+                return memberRepository.findByNumOrNameOrFamilyName(null, keySearch, keySearch,page);
+        }
+        return memberRepository.findAll(page);
     }
 }
