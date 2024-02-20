@@ -66,15 +66,15 @@ public class RankingServiceImpl implements RankingService {
 
 
     @Override
-    public List<Ranking> sortMemberWithPoints(String code){
-        Competition competition=competitionService.findCompetitionByCode(Competition.builder().code(code).build());
+    public List<Ranking> sortMemberWithPoints(String code) {
+        Competition competition = competitionService.findCompetitionByCode(Competition.builder().code(code).build());
         throwExceptionWhenCompetitionDoNotExist(competition);
-        List<Ranking> rankings=rankingRepository.findByCompetitionOrderByScoreAsc(competition);
-        for (int i = 1; i < rankings.size()-1; i++) {
-            if((i!=1)&&(rankings.get(i).getScore().equals(rankings.get(i-1).getScore()))){
-                rankings.get(i).setRank(rankings.get(i-1).getRank());
-            }else{
-                rankings.get(i).setRank(i);
+        List<Ranking> rankings = rankingRepository.findByCompetitionOrderByScoreDesc(competition);
+        for (int i = 0; i < rankings.size(); i++) {
+            if (i != 0 && rankings.get(i).getScore().equals(rankings.get(i - 1).getScore())) {
+                rankings.get(i).setRank(rankings.get(i - 1).getRank());
+            } else {
+                rankings.get(i).setRank(i + 1);
             }
         }
         return rankings;

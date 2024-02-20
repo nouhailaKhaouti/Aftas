@@ -47,10 +47,12 @@ public class HuntingServiceImpl implements HuntingService {
             throw  new CustomException("the fish can't be counted as a hunt , as it doesn't meet the min weight required", HttpStatus.CONFLICT);
         }
 
-        ranking.setScore(ranking.getRank()+fish.getLevel().getPoints());
+        ranking.setScore(ranking.getScore()+fish.getLevel().getPoints());
         rankingService.update(ranking);
         hunting.setMember(member);
         hunting.setCompetition(competition);
+        hunting.setFish(fish);
+        hunting.setNumberOfFish(1);
         Hunting hunting1=huntingRepository.findHuntingByFishAndMemberAndCompetition(fish,hunting.getMember(),hunting.getCompetition());
         if(hunting1!=null){
             return update(hunting1);

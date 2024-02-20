@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
@@ -23,6 +24,10 @@ public class CompetitionServiceImpl implements CompetitionService {
 
     @Override
     public Competition create(Competition competition){
+/*        LocalTime time= LocalTime.of(8, 0, 0);
+        LocalTime endTime=LocalTime.of(18,0);
+        competition.setStartTime(time);
+        competition.setEndTime(endTime);*/
         if((competition.getStartTime()!=competition.getEndTime())&&(competition.getEndTime().isAfter(competition.getStartTime()))) {
             if (competition.getDate().isAfter(LocalDate.now().plusDays(2))) {
                 if (competitionRepository.findCompetitionByDate(competition.getDate()) == null) {
@@ -30,6 +35,7 @@ public class CompetitionServiceImpl implements CompetitionService {
                     String formattedDate = competition.getDate().format(DateTimeFormatter.ofPattern("dd-MM-yy"));
                     String generatedName = locationAbbreviation + "-" + formattedDate;
                     competition.setCode(generatedName);
+
                     return competitionRepository.save(competition);
                 }
                 throw new AlreadyExistException();

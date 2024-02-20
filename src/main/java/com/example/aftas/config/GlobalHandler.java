@@ -29,7 +29,7 @@ public class GlobalHandler {
 
     private Map<String, List<String>> getErrorsMap(List<String> errors) {
         Map<String, List<String>> errorResponse = new HashMap<>();
-        errorResponse.put("errors", errors);
+        errorResponse.put("error", errors);
         return errorResponse;
     }
 
@@ -47,6 +47,7 @@ public class GlobalHandler {
     public ResponseEntity<?> handleCustomErrors(CustomException e){
         return new ResponseEntity<>(e.getError(), e.getStatus());
     }
+
     @ExceptionHandler(value= DateValidationException.class)
     public ResponseEntity<?> handleDateValidationErrors(DateValidationException e){
         return new ResponseEntity<>(e.getError(), e.getCode());

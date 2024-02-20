@@ -26,11 +26,13 @@ public class Competition {
   @Column(unique = true)
   private LocalDate date;
 
+  @Column(columnDefinition = "time without time zone default 08:00:00")
   private LocalTime startTime;
 
   @Column(unique = true)
   private String code;
 
+  @Column(columnDefinition = "time without time zone default 18:00:00")
   private LocalTime endTime;
 
   @Column(columnDefinition="Integer default 0")
