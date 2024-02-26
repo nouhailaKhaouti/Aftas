@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -40,13 +41,14 @@ public class RankingController {
         return new ResponseEntity<>(rankingResponse, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('MANAGER') AND hasRole('JURY')")
     @PostMapping("/")
     public ResponseEntity<?> addRanking(@Valid @RequestBody() rankingRequest rankingrequest) {
             Ranking addedRanking = rankingService.create(rankingrequest.ToRankingEntity());
             return new ResponseEntity<>(modelMapper.map(addedRanking,RankingResponse.class), HttpStatus.OK);
     }
 
-
+    @PreAuthorize("hasRole('MANAGER') AND hasRole('JURY')")
     @DeleteMapping("/{competition}/{member}")
     public ResponseEntity<?> deleteRanking(@PathVariable("competition") String competition,@PathVariable("member") Integer member) {
 

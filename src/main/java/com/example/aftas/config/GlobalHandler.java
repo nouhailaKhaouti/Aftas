@@ -7,6 +7,7 @@ import com.example.aftas.exception.DateValidationException;
 import com.example.aftas.exception.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -51,5 +52,10 @@ public class GlobalHandler {
     @ExceptionHandler(value= DateValidationException.class)
     public ResponseEntity<?> handleDateValidationErrors(DateValidationException e){
         return new ResponseEntity<>(e.getError(), e.getCode());
+    }
+
+    @ExceptionHandler(LockedException.class)
+    public ResponseEntity<?> handleLockedError(LockedException e){
+        return ResponseEntity.badRequest().body(e.getMessage());
     }
 }

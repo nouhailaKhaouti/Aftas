@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,11 +30,15 @@ public class FishController {
             return new ResponseEntity<>(fishes.stream().map(f->modelMapper.map(f, responseFish.class)).toList(), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('MANAGER')")
+
     @PostMapping("/")
     public ResponseEntity<?> addFish(@RequestBody() Fish fish) {
             Fish addedFish = fishService.create(fish);
             return new ResponseEntity<>(addedFish, HttpStatus.OK);
     }
+
+    @PreAuthorize("hasRole('MANAGER')")
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateFish(@PathVariable("id") long id, @RequestBody() Fish fish) {
@@ -42,6 +47,7 @@ public class FishController {
             return new ResponseEntity<>(addedFish, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('MANAGER')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteFish(@PathVariable("id") long id) {
 

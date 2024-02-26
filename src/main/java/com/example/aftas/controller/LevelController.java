@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,6 +32,8 @@ public class LevelController {
             return new ResponseEntity<>(levels.stream().map(l->modelMapper.map(l,ResponseLevel.class)).toList(), HttpStatus.OK);
     }
 
+
+    @PreAuthorize("hasRole('MANAGER')")
     @PostMapping("/")
     public ResponseEntity<?> addLevel(@Valid @RequestBody() addLevel addlevel) {
             Level level=modelMapper.map(addlevel,Level.class);
@@ -39,6 +42,7 @@ public class LevelController {
             return new ResponseEntity<>(responselevel, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('MANAGER')")
     @PutMapping("/{id}")
     public ResponseEntity<?> updateLevel(@PathVariable("id") long id, @RequestBody() Level level) {
         level.setId(id);
@@ -46,6 +50,7 @@ public class LevelController {
             return new ResponseEntity<>(addedLevel, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('MANAGER')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteLevel(@PathVariable("id") long id) {
 

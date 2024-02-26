@@ -6,6 +6,7 @@ import com.example.aftas.exception.AlreadyExistException;
 import com.example.aftas.exception.DateValidationException;
 import com.example.aftas.exception.NotFoundException;
 import com.example.aftas.service.facade.CompetitionService;
+import com.example.aftas.service.facade.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +22,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CompetitionServiceImpl implements CompetitionService {
     final private CompetitionRepository competitionRepository;
+    final private MemberService memberService;
 
     @Override
     public Competition create(Competition competition){
@@ -82,6 +84,11 @@ public class CompetitionServiceImpl implements CompetitionService {
     @Override
     public Competition findCompetitionByCode(Competition competition){
         return competitionRepository.findCompetitionByCode(competition.getCode());
+    }
+
+    @Override
+    public List<Competition> findCompetitionByMember(Integer num){
+        return competitionRepository.findByRankingsMember(memberService.findByNum(num));
     }
 
     @Override

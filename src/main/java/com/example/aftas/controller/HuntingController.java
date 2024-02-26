@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,13 +38,14 @@ public class HuntingController {
         return new ResponseEntity<>(huntingService.findByMemberAndCompetition(request.ToHunting()).stream().map(h->modelMapper.map(h,responseHunting.class)).toList(), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('MANAGER') AND hasRole('JURY')")
     @PostMapping("/")
     public ResponseEntity<?> addHunting(@Valid  @RequestBody() requestHuntingWithWeight hunting) {
             Hunting addedHunting = huntingService.create(hunting.getHunting().ToHunting(), hunting.getWeight());
             return new ResponseEntity<>(modelMapper.map(addedHunting,responseHunting.class), HttpStatus.OK);
     }
 
-
+    @PreAuthorize("hasRole('MANAGER') AND hasRole('JURY')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteHunting(@PathVariable("id") long id) {
 

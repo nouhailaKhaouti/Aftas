@@ -26,4 +26,7 @@ public class requestMember {
     @NotNull(message = "the location can't be null")
     @NotBlank(message = "the location can't be blank")
     private String identityNumber;
+    private String email;
+    private String password;
+
 }

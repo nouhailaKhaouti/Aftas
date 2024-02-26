@@ -1,5 +1,6 @@
 package com.example.aftas.controller.vm.competition.response;
 
+import lombok.Builder;
 import lombok.Data;
 
 import java.sql.Time;

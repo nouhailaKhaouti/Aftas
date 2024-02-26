@@ -15,18 +15,21 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("Aftas/api/competition")
+
 public class CompetitionController {
 
     final private CompetitionService competitionService;
 
     final ModelMapper modelMapper;
 
+    @PreAuthorize("hasRole('JURY') AND hasRole('MANAGER')")
     @PostMapping("/Competitions")
     public ResponseEntity<?> getAllCompetitions(@RequestParam(required = false) String code,@RequestParam(defaultValue = "0") Integer page,@RequestParam(defaultValue = "4") Integer size) {
             Pageable paging= PageRequest.of(page,size);
@@ -44,12 +47,21 @@ public class CompetitionController {
                     build(), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('JURY') AND hasRole('MANAGER')")
     @GetMapping("/{id}")
     public ResponseEntity<?> findCompetitionById(@PathVariable("id") Long id) {
         Competition competitions = competitionService.findById(Competition.builder().id(id).build());
         return new ResponseEntity<>(modelMapper.map(competitions,ResponseCompetition.class), HttpStatus.OK);
     }
 
+
+    @GetMapping("/")
+    public ResponseEntity<?> findCompetitionByMember(@RequestParam("id") Integer num) {
+        List<Competition> competitions = competitionService.findCompetitionByMember(num);
+        return new ResponseEntity<>(competitions.stream().map(c->modelMapper.map(c,responseCompetitionWithOutRanking.class)), HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('MANAGER')")
     @PostMapping("/")
     public ResponseEntity<?> addCompetition(@Valid @RequestBody() addCompetition addcompetition) {
             Competition competition=modelMapper.map(addcompetition,Competition.class);
@@ -58,6 +70,7 @@ public class CompetitionController {
             return new ResponseEntity<>(competition1, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('MANAGER')")
     @PutMapping("/{id}")
     public ResponseEntity<?> updateCompetition(@PathVariable("id") long id, @RequestBody() addCompetition addcompetition) {
         Competition competition=modelMapper.map(addcompetition,Competition.class);
@@ -67,6 +80,7 @@ public class CompetitionController {
         return new ResponseEntity<>(competition1, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('MANAGER')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteCompetition(@PathVariable("id") long id) {
 

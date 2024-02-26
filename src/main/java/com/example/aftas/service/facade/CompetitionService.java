@@ -22,4 +22,6 @@ public interface CompetitionService {
     List<Competition> findAll();
 
     Competition findCompetitionByCode(Competition competition);
+
+    public List<Competition> findCompetitionByMember(Integer num);
 }
