@@ -13,8 +13,8 @@ public class requestMember {
     @NotBlank(message = "the location can't be blank")
     private String name;
 
-    @NotNull(message = "the location can't be null")
-    @NotBlank(message = "the location can't be blank")
+/*    @NotNull(message = "the location can't be null")
+    @NotBlank(message = "the location can't be blank")*/
     private String familyName;
 
     @NotNull(message = "the location can't be null")

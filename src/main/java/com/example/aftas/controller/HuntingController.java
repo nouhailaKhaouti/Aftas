@@ -38,14 +38,14 @@ public class HuntingController {
         return new ResponseEntity<>(huntingService.findByMemberAndCompetition(request.ToHunting()).stream().map(h->modelMapper.map(h,responseHunting.class)).toList(), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('MANAGER') AND hasRole('JURY')")
+    @PreAuthorize("hasRole('MANAGER') AND hasRole('JUDGES')")
     @PostMapping("/")
     public ResponseEntity<?> addHunting(@Valid  @RequestBody() requestHuntingWithWeight hunting) {
             Hunting addedHunting = huntingService.create(hunting.getHunting().ToHunting(), hunting.getWeight());
             return new ResponseEntity<>(modelMapper.map(addedHunting,responseHunting.class), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('MANAGER') AND hasRole('JURY')")
+    @PreAuthorize("hasRole('MANAGER') AND hasRole('JUDGES')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteHunting(@PathVariable("id") long id) {
 

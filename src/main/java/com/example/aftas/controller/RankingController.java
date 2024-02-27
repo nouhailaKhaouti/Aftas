@@ -41,14 +41,14 @@ public class RankingController {
         return new ResponseEntity<>(rankingResponse, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('MANAGER') AND hasRole('JURY')")
+    @PreAuthorize("hasRole('MANAGER') AND hasRole('JUDGES')")
     @PostMapping("/")
     public ResponseEntity<?> addRanking(@Valid @RequestBody() rankingRequest rankingrequest) {
             Ranking addedRanking = rankingService.create(rankingrequest.ToRankingEntity());
             return new ResponseEntity<>(modelMapper.map(addedRanking,RankingResponse.class), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('MANAGER') AND hasRole('JURY')")
+    @PreAuthorize("hasRole('MANAGER') AND hasRole('JUDGES')")
     @DeleteMapping("/{competition}/{member}")
     public ResponseEntity<?> deleteRanking(@PathVariable("competition") String competition,@PathVariable("member") Integer member) {
 

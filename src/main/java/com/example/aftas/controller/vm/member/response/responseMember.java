@@ -1,6 +1,7 @@
 package com.example.aftas.controller.vm.member.response;
 
 import com.example.aftas.entities.Member;
+import com.example.aftas.entities.Role;
 import lombok.Data;
 
 @Data
@@ -16,4 +17,8 @@ public class responseMember {
     private Member.IdentityDocumentType identityDocument;
 
     private String identityNumber;
+
+    private Boolean accountApproved= false;
+
+    private Role role;
 }

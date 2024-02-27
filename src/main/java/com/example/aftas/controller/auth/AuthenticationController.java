@@ -4,6 +4,7 @@ import com.example.aftas.controller.vm.AuthenticationRequest;
 import com.example.aftas.controller.vm.AuthenticationResponse;
 import com.example.aftas.controller.vm.member.request.requestMember;
 import com.example.aftas.entities.Member;
+import com.example.aftas.service.authService.LogoutService;
 import com.example.aftas.service.facade.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -46,4 +47,5 @@ public class AuthenticationController {
     ) throws IOException {
         memberService.refreshToken(request, response);
     }
+
 }

@@ -58,7 +58,6 @@ public class MemberController {
         return ResponseEntity.ok(memberService.approveAccount(member));
     }
 
-    @PreAuthorize("hasRole('MANAGER')")
     @PostMapping("/Members")
     public ResponseEntity<?> search(@RequestParam(required = false) String search, @RequestParam(defaultValue = "0") Integer page,
                                     @RequestParam(defaultValue = "3") Integer size){

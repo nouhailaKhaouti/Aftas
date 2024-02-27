@@ -29,7 +29,6 @@ public class CompetitionController {
 
     final ModelMapper modelMapper;
 
-    @PreAuthorize("hasRole('JURY') AND hasRole('MANAGER')")
     @PostMapping("/Competitions")
     public ResponseEntity<?> getAllCompetitions(@RequestParam(required = false) String code,@RequestParam(defaultValue = "0") Integer page,@RequestParam(defaultValue = "4") Integer size) {
             Pageable paging= PageRequest.of(page,size);
@@ -47,7 +46,7 @@ public class CompetitionController {
                     build(), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('JURY') AND hasRole('MANAGER')")
+    @PreAuthorize("hasRole('JUDGES') AND hasRole('MANAGER')")
     @GetMapping("/{id}")
     public ResponseEntity<?> findCompetitionById(@PathVariable("id") Long id) {
         Competition competitions = competitionService.findById(Competition.builder().id(id).build());
